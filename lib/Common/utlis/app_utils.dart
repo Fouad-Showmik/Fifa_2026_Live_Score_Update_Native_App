@@ -3,33 +3,37 @@ import 'package:intl/intl.dart';
 class AppUtils {
   AppUtils._();
 
-  static DateTime? _parse(String localDate) {
+  static final _fmt = DateFormat('MM/dd/yyyy HH:mm');
+
+  // Parses raw API date string into DateTime
+  static DateTime? parseLocalDate(String raw) {
+    if (raw.isEmpty) return null;
     try {
-      return DateFormat('MM/dd/yyyy HH:mm').parse(localDate);
+      return _fmt.parse(raw);
     } catch (e) {
       return null;
     }
   }
 
-  static String formatTime(String localDate) {
-    final d = _parse(localDate);
-    return d != null ? DateFormat('HH:mm').format(d) : '';
+  // "HH:mm" — used on match cards for upcoming matches
+  static String formatTime(DateTime? date) {
+    if (date == null) return '';
+    return DateFormat('HH:mm').format(date);
   }
 
-  static String formatDate(String localDate) {
-    final d = _parse(localDate);
-    return d != null ? DateFormat('MMM dd').format(d) : '';
+  // "MMM d" — used for fixture date pills 
+  static String formatTabDate(DateTime? date) {
+    if (date == null) return '';
+    return DateFormat('MMM d').format(date);
   }
 
-  static String formatTabDate(String dateKey) {
-    try {
-      final d = DateFormat('MM/dd/yyyy').parse(dateKey);
-      return DateFormat('MMM d').format(d);
-    } catch (e) {
-      return dateKey;
-    }
+  // used for grouping matches by date
+  static String dateKey(DateTime? date) {
+    if (date == null) return '';
+    return DateFormat('MM/dd/yyyy').format(date);
   }
 
+  // Formats capacity with commas e.g. 94000 → "94,000"
   static String formatCapacity(int cap) {
     return cap.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),

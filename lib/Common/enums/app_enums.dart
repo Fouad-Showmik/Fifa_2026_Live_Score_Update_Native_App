@@ -1,23 +1,36 @@
 enum MatchStatus {
-  notStarted, firstHalf, halfTime, secondHalf, extraTime, penalties, finished, unknown;
+  notStarted,
+  firstHalf,
+  halfTime,
+  secondHalf,
+  extraTime,
+  penalties,
+  finished,
+  unknown;
 
-  static MatchStatus fromString(String v) {
-    return switch (v.toLowerCase()) {
-      'notstarted'                  => MatchStatus.notStarted,
-      '1h' || 'first_half'         => MatchStatus.firstHalf,
-      'ht' || 'half_time'          => MatchStatus.halfTime,
-      '2h' || 'second_half'        => MatchStatus.secondHalf,
-      'et' || 'extra_time'         => MatchStatus.extraTime,
-      'p'  || 'penalties'          => MatchStatus.penalties,
-      'ft' || 'finished' || 'true' => MatchStatus.finished,
-      _                            => MatchStatus.unknown,
+  static MatchStatus fromApi(String timeElapsed, String finished) {
+    if (finished.toUpperCase() == 'TRUE') return MatchStatus.finished;
+    return switch (timeElapsed.toLowerCase()) {
+      'notstarted' => MatchStatus.notStarted,
+      '1h' || 'first_half' => MatchStatus.firstHalf,
+      'ht' || 'half_time' => MatchStatus.halfTime,
+      '2h' || 'second_half' => MatchStatus.secondHalf,
+      'et' || 'extra_time' => MatchStatus.extraTime,
+      'p' || 'penalties' => MatchStatus.penalties,
+      'ft' || 'finished' => MatchStatus.finished,
+      _ => MatchStatus.unknown,
     };
   }
 
-  bool get isLive => this == firstHalf || this == halfTime ||
-      this == secondHalf || this == extraTime || this == penalties;
-  bool get isFinished  => this == finished;
-  bool get isUpcoming  => this == notStarted;
+  bool get isLive =>
+      this == firstHalf ||
+      this == halfTime ||
+      this == secondHalf ||
+      this == extraTime ||
+      this == penalties;
+
+  bool get isFinished => this == finished;
+  bool get isUpcoming => this == notStarted;
 }
 
 enum GameType {
