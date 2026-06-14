@@ -6,7 +6,7 @@ class AppUtils {
   static DateTime? _parse(String localDate) {
     try {
       return DateFormat('MM/dd/yyyy HH:mm').parse(localDate);
-    } catch (_) {
+    } catch (e) {
       return null;
     }
   }
@@ -22,11 +22,10 @@ class AppUtils {
   }
 
   static String formatTabDate(String dateKey) {
-    // dateKey is MM/DD/YYYY
     try {
       final d = DateFormat('MM/dd/yyyy').parse(dateKey);
       return DateFormat('MMM d').format(d);
-    } catch (_) {
+    } catch (e) {
       return dateKey;
     }
   }
