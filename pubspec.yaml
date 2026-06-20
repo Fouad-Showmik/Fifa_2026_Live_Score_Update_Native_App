@@ -12,6 +12,10 @@ dependencies:
     sdk: flutter
   intl: ^0.20.2
   shimmer: ^3.0.0
+  # dot_matrix_text: ^0.2.1 
+  flutter_dotenv: ^6.0.1 
+  dio: ^5.9.2
+  flutter_riverpod: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +26,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - .env
   fonts:
     - family: BarlowCondensed
       fonts:

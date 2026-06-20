@@ -1,3 +1,5 @@
+import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
+import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class LiveIndicator extends StatefulWidget {
@@ -32,7 +34,7 @@ class _LiveIndicatorState extends State<LiveIndicator> with SingleTickerProvider
     children: [
       AnimatedBuilder(
         animation: _opacity,
-        builder: (_, __) => Opacity(
+        builder: (_, _) => Opacity(
           opacity: _opacity.value,
           child: Container(
             width: 7, height: 7,
