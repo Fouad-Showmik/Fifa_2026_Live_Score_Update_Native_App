@@ -9,14 +9,13 @@ class MatchList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch full state so list rebuilds when filter or matches change
-    ref.watch(matchProvider.select((s) => s.liveFilter));
+    ref.watch(matchProvider);
     final matches = ref.read(matchProvider.notifier).filteredHomeMatches();
 
     if (matches.isEmpty) {
       return const Padding(
         padding: EdgeInsets.only(top: 60),
-        child: EmptyStateWidget(message: 'No matches for this filter'),
+        child: EmptyStateWidget(message: 'No Matches Found'),
       );
     }
     return Column(children: matches.map((m) => MatchCard(match: m)).toList());

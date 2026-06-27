@@ -2,7 +2,6 @@ import 'package:fifa_2026_live_score_update/App/group/group_controller.dart';
 import 'package:fifa_2026_live_score_update/App/group/widgets/group_standing_table.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
-import 'package:fifa_2026_live_score_update/Common/widgets/app_icon_button.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/app_top_bar.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/empty_state_widget.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/error_state_widget.dart';
@@ -19,9 +18,9 @@ class GroupsPage extends ConsumerWidget {
     final state = ref.watch(groupProvider);
 
     return Scaffold(
-      appBar: AppTopBar(
+      appBar: const AppTopBar(
         title: 'Groups',
-        actions: [AppIconButton(icon: Icons.tune_outlined, onTap: () {})],
+        // actions: [AppIconButton(icon: Icons.tune_outlined, onTap: () {})],
       ),
       body: Builder(
         builder: (_) {

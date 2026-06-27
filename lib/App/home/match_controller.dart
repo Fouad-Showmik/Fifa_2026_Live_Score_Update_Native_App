@@ -13,6 +13,7 @@ class MatchState {
   final String? error;
   final LiveScoreFilter liveFilter;
   final String selectedDate;
+  final String searchQuery;
 
   const MatchState({
     this.matches = const [],
@@ -20,6 +21,7 @@ class MatchState {
     this.error,
     this.liveFilter = LiveScoreFilter.all,
     this.selectedDate = '',
+    this.searchQuery = '',
   });
 
   MatchState copyWith({
@@ -29,6 +31,7 @@ class MatchState {
     LiveScoreFilter? liveFilter,
     String? selectedDate,
     bool clearError = false,
+    String? searchQuery,
   }) {
     return MatchState(
       matches: matches ?? this.matches,
@@ -36,6 +39,7 @@ class MatchState {
       error: clearError ? null : (error ?? this.error),
       liveFilter: liveFilter ?? this.liveFilter,
       selectedDate: selectedDate ?? this.selectedDate,
+      searchQuery: searchQuery ?? this.searchQuery,
     );
   }
 }
@@ -85,12 +89,32 @@ class MatchController extends StateNotifier<MatchState> {
 
   List<GameModel> filteredHomeMatches() {
     final base = state.matches.where((m) => m.isGroupStage);
-    return switch (state.liveFilter) {
-      LiveScoreFilter.all => base.toList(),
+
+    final filtered = switch (state.liveFilter) {
+      LiveScoreFilter.all => [...base],
       LiveScoreFilter.live => base.where((m) => m.isLive).toList(),
       LiveScoreFilter.finished => base.where((m) => m.isFinished).toList(),
       LiveScoreFilter.upcoming => base.where((m) => m.isUpcoming).toList(),
     };
+
+    // Apply search on top of filter
+    final query = state.searchQuery;
+    final searched = query.isEmpty
+        ? filtered
+        : filtered.where((m) {
+            return m.homeTeamNameEn.toLowerCase().contains(query) ||
+                m.awayTeamNameEn.toLowerCase().contains(query) ||
+                m.homeTeamNameFa.contains(query) ||
+                m.awayTeamNameFa.contains(query);
+          }).toList();
+
+    searched.sort((a, b) {
+      final aDate = a.localDate ?? DateTime(9999);
+      final bDate = b.localDate ?? DateTime(9999);
+      return aDate.compareTo(bDate);
+    });
+
+    return searched;
   }
 
   List<String> fixtureDates() =>
@@ -126,7 +150,6 @@ class MatchController extends StateNotifier<MatchState> {
   }
 
   String tabLabel(String dateKey) {
-    // dateKey is "MM/dd/yyyy" — parse back to DateTime for formatting
     try {
       final parts = dateKey.split('/');
       if (parts.length == 3) {
@@ -163,5 +186,12 @@ class MatchController extends StateNotifier<MatchState> {
         .toList()
       ..sort();
   }
-}
 
+  void setSearch(String query) {
+    state = state.copyWith(searchQuery: query.trim().toLowerCase());
+  }
+
+  void clearSearch() {
+    state = state.copyWith(searchQuery: '');
+  }
+}

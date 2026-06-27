@@ -61,9 +61,22 @@ class MatchCard extends StatelessWidget {
         ),
       );
     }
-    return Text(
-      match.displayTime,
-      style: AppTextStyles.titleSmall.copyWith(fontSize: 13),
+    // Upcoming: show date + time stacked
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          match.displayDate,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.textSecondary,
+            fontSize: 11,
+          ),
+        ),
+        Text(
+          match.displayTime,
+          style: AppTextStyles.titleSmall.copyWith(fontSize: 13),
+        ),
+      ],
     );
   }
 

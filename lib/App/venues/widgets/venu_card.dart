@@ -1,5 +1,4 @@
-
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fifa_2026_live_score_update/App/models/stadium_model.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
@@ -7,54 +6,107 @@ import 'package:flutter/material.dart';
 
 class VenueCard extends StatelessWidget {
   final StadiumModel stadium;
-  final bool isFirst;
 
-  const VenueCard({super.key, required this.stadium, this.isFirst = false});
+  const VenueCard({super.key, required this.stadium});
 
   @override
   Widget build(BuildContext context) => Container(
     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-    padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
       color: AppColors.surface,
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(
-        color: isFirst ? AppColors.gold.withValues(alpha: 0.4) : AppColors.border,
-        width: isFirst ? 1.5 : 1,
-      ),
+      border: Border.all(color: AppColors.border),
     ),
-    child: Row(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _icon(),
-        const SizedBox(width: 14),
-        Expanded(child: _info()),
-        _capacity(),
+        _image(),
+        Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            children: [
+              Expanded(child: _info()),
+              _capacity(),
+            ],
+          ),
+        ),
       ],
     ),
   );
 
-  Widget _icon() => Container(
-    width: 44, height: 44,
-    decoration: BoxDecoration(
-      color: isFirst ? AppColors.goldSurface : AppColors.surfaceVariant,
-      borderRadius: BorderRadius.circular(10),
+  // Stadium image
+
+  Widget _image() => ClipRRect(
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+    child: Image.asset(
+      stadium.imagePath,
+      height: 160,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => _imageFallback(),
     ),
-    child: Icon(Icons.stadium_outlined, color: isFirst ? AppColors.gold : AppColors.textSecondary, size: 22),
   );
+
+  Widget _imageFallback() => Container(
+    height: 160,
+    color: AppColors.surfaceVariant,
+    child: const Center(
+      child: Icon(
+        Icons.stadium_outlined,
+        size: 48,
+        color: AppColors.textSecondary,
+      ),
+    ),
+  );
+
+  Widget _imagePlaceholder() => Container(
+    height: 160,
+    color: AppColors.surfaceVariant,
+    child: const Center(
+      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
+    ),
+  );
+
+  // Info
 
   Widget _info() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(stadium.nameEn, style: AppTextStyles.titleSmall, overflow: TextOverflow.ellipsis),
+      Text(
+        stadium.nameEn,
+        style: AppTextStyles.titleSmall,
+        overflow: TextOverflow.ellipsis,
+      ),
       const SizedBox(height: 2),
-      Text('${stadium.cityEn} · ${stadium.countryEn}', style: AppTextStyles.labelMedium, overflow: TextOverflow.ellipsis),
+      Row(
+        children: [
+          const Icon(
+            Icons.place_outlined,
+            size: 12,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(width: 4),
+          Flexible(
+            child: Text(
+              '${stadium.cityEn} · ${stadium.countryEn}',
+              style: AppTextStyles.labelMedium,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     ],
   );
+
+  // Capacity
 
   Widget _capacity() => Column(
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
-      Text(stadium.formattedCapacity, style: AppTextStyles.titleLarge.copyWith(fontSize: 18)),
+      Text(
+        stadium.formattedCapacity,
+        style: AppTextStyles.titleLarge.copyWith(fontSize: 18),
+      ),
       const Text('capacity', style: AppTextStyles.labelSmall),
     ],
   );

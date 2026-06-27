@@ -3,7 +3,6 @@ import 'package:fifa_2026_live_score_update/App/venues/venue_controller.dart';
 import 'package:fifa_2026_live_score_update/App/venues/widgets/venu_card.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/enums/app_enums.dart';
-import 'package:fifa_2026_live_score_update/Common/widgets/app_icon_button.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/app_top_bar.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/empty_state_widget.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/error_state_widget.dart';
@@ -20,9 +19,9 @@ class VenuesPage extends ConsumerWidget {
     final state = ref.watch(venueProvider);
 
     return Scaffold(
-      appBar: AppTopBar(
+      appBar: const AppTopBar(
         title: 'Venues',
-        actions: [AppIconButton(icon: Icons.map_outlined, onTap: () {})],
+        // actions: [AppIconButton(icon: Icons.map_outlined, onTap: () {})],
       ),
       body: Builder(builder: (_) {
         if (state.isLoading && state.stadiums.isEmpty) return const LoadingWidget();
@@ -56,7 +55,7 @@ class VenuesPage extends ConsumerWidget {
                   child: ListView.builder(
                     padding: const EdgeInsets.only(bottom: 16),
                     itemCount: list.length,
-                    itemBuilder: (_, i) => VenueCard(stadium: list[i], isFirst: i == 0),
+                        itemBuilder: (_, i) => VenueCard(stadium: list[i]),
                   ),
                 );
               }),

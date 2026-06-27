@@ -1,17 +1,24 @@
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
+import 'package:fifa_2026_live_score_update/Common/widgets/search_field.dart';
 import 'package:flutter/material.dart';
 
 class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool showLogo;
   final List<Widget> actions;
+  final bool isSearching;
+  final ValueChanged<String>? onSearchChanged;
+  final VoidCallback? onSearchClose;
 
   const AppTopBar({
     super.key,
     this.title,
     this.showLogo = false,
     this.actions = const [],
+    this.isSearching = false,
+    this.onSearchChanged,
+    this.onSearchClose,
   });
 
   @override
@@ -23,10 +30,18 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.background,
       elevation: 0,
       titleSpacing: 16,
-      title: showLogo ? _logo() : _title(),
-      actions: [...actions, const SizedBox(width: 4)],
+      title: isSearching ? _searchField() : (showLogo ? _logo() : _title()),
+      actions: isSearching ? [] : [...actions, const SizedBox(width: 4)],
     );
   }
+
+
+  Widget _searchField() => SearchField(
+    onChanged: onSearchChanged ?? (_) {},
+    onClose: onSearchClose ?? () {},
+  );
+
+  // Logo
 
   Widget _logo() => Row(
     mainAxisSize: MainAxisSize.min,
@@ -53,6 +68,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     ],
   );
 
+  // Title
   Widget _title() =>
       Text((title ?? '').toUpperCase(), style: AppTextStyles.displayMedium);
 }

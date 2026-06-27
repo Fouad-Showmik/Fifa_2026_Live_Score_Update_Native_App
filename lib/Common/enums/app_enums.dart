@@ -10,15 +10,22 @@ enum MatchStatus {
 
   static MatchStatus fromApi(String timeElapsed, String finished) {
     if (finished.toUpperCase() == 'TRUE') return MatchStatus.finished;
-    return switch (timeElapsed.toLowerCase()) {
-      'notstarted' => MatchStatus.notStarted,
+
+    final t = timeElapsed.toLowerCase().trim();
+
+    return switch (t) {
+      'notstarted' || '' || 'null' => MatchStatus.notStarted,
+      'live' => MatchStatus.firstHalf, 
       '1h' || 'first_half' => MatchStatus.firstHalf,
       'ht' || 'half_time' => MatchStatus.halfTime,
       '2h' || 'second_half' => MatchStatus.secondHalf,
       'et' || 'extra_time' => MatchStatus.extraTime,
       'p' || 'penalties' => MatchStatus.penalties,
       'ft' || 'finished' => MatchStatus.finished,
-      _ => MatchStatus.unknown,
+      _ =>
+        RegExp(r'^\d+(\+\d+)?$').hasMatch(t)
+            ? MatchStatus.firstHalf
+            : MatchStatus.notStarted,
     };
   }
 
@@ -30,7 +37,7 @@ enum MatchStatus {
       this == penalties;
 
   bool get isFinished => this == finished;
-  bool get isUpcoming => this == notStarted;
+  bool get isUpcoming => this == notStarted || this == unknown;
 }
 
 enum GameType {

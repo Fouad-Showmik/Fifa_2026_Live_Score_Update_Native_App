@@ -19,7 +19,7 @@ class TeamsPage extends ConsumerWidget {
     final teamState = ref.watch(teamProvider);
 
     return Scaffold(
-      appBar: const AppTopBar(showLogo: true),
+      appBar: const AppTopBar(showLogo: false, title: 'Teams'),
       body: Builder(
         builder: (_) {
           if (teamState.isLoading && teamState.teams.isEmpty) {

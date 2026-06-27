@@ -1,3 +1,4 @@
+import 'package:fifa_2026_live_score_update/Common/constants/app_constants.dart';
 import 'package:fifa_2026_live_score_update/Common/utlis/app_utils.dart';
 
 class StadiumModel {
@@ -45,4 +46,5 @@ class StadiumModel {
   bool get isCanada => countryEn == 'Canada';
   bool get isMexico => countryEn == 'Mexico';
   String get formattedCapacity => AppUtils.formatCapacity(capacity);
+  String get imagePath => 'assets/stadiums/$id.jpg';
 }

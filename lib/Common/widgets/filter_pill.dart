@@ -19,16 +19,23 @@ class FilterPill extends StatelessWidget {
     onTap: onTap,
     child: AnimatedContainer(
       duration: const Duration(milliseconds: 180),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         color: isActive ? AppColors.pillActiveBg : AppColors.pillBg,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(
-        label,
-        style: AppTextStyles.titleSmall.copyWith(
-          fontSize: 13,
-          color: isActive ? AppColors.pillActiveText : AppColors.textSecondary,
+      child: Center(
+        widthFactor: 1,
+        child: Text(
+          label,
+          style: AppTextStyles.titleSmall.copyWith(
+            fontSize: 13,
+            height: 1.0,
+            leadingDistribution: TextLeadingDistribution.even,
+            color: isActive
+                ? AppColors.pillActiveText
+                : AppColors.textSecondary,
+          ),
         ),
       ),
     ),

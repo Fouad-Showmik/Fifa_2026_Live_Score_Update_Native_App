@@ -9,19 +9,35 @@ import 'package:fifa_2026_live_score_update/Common/widgets/error_state_widget.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  bool _isSearching = false;
+
+  void _openSearch() => setState(() => _isSearching = true);
+
+  void _closeSearch() {
+    setState(() => _isSearching = false);
+    ref.read(matchProvider.notifier).clearSearch();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(matchProvider);
 
     return Scaffold(
       appBar: AppTopBar(
         showLogo: true,
+        isSearching: _isSearching,
+        onSearchChanged: ref.read(matchProvider.notifier).setSearch,
+        onSearchClose: _closeSearch,
         actions: [
-          AppIconButton(icon: Icons.search_outlined, onTap: () {}),
-          AppIconButton(icon: Icons.notifications_outlined, onTap: () {}),
+          AppIconButton(icon: Icons.search_outlined, onTap: _openSearch),
         ],
       ),
       body: Builder(
@@ -29,7 +45,11 @@ class HomePage extends ConsumerWidget {
           if (state.isLoading && state.matches.isEmpty) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [_heading(), const SizedBox(height: 48), const MatchCardShimmer()],
+              children: [
+                _heading(),
+                const SizedBox(height: 48),
+                const MatchCardShimmer(),
+              ],
             );
           }
           if (state.error != null && state.matches.isEmpty) {
@@ -43,11 +63,11 @@ class HomePage extends ConsumerWidget {
             color: AppColors.gold,
             backgroundColor: AppColors.surface,
             child: ListView(
-              children:  [
-                _heading(),
-                const SizedBox(height: 4),
-                const FilterRow(),
-                const SizedBox(height: 8),
+              children: [
+                if (!_isSearching) _heading(),
+                if (!_isSearching) const SizedBox(height: 4),
+                if (!_isSearching) const FilterRow(),
+                if (!_isSearching) const SizedBox(height: 8),
                 const MatchList(),
                 const SizedBox(height: 16),
               ],
@@ -74,4 +94,3 @@ class HomePage extends ConsumerWidget {
     );
   }
 }
-

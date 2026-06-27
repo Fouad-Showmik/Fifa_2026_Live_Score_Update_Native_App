@@ -2,7 +2,6 @@ import 'package:fifa_2026_live_score_update/App/home/match_controller.dart';
 import 'package:fifa_2026_live_score_update/App/home/widgets/match_card.dart';
 import 'package:fifa_2026_live_score_update/App/home/widgets/match_card_shimmer.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
-import 'package:fifa_2026_live_score_update/Common/widgets/app_icon_button.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/app_top_bar.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/empty_state_widget.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/error_state_widget.dart';
@@ -19,11 +18,11 @@ class FixturesPage extends ConsumerWidget {
     final state = ref.watch(matchProvider);
 
     return Scaffold(
-      appBar: AppTopBar(
+      appBar: const AppTopBar(
         title: 'Fixtures',
-        actions: [
-          AppIconButton(icon: Icons.filter_list_outlined, onTap: () {}),
-        ],
+        // actions: [
+        //   AppIconButton(icon: Icons.filter_list_outlined, onTap: () {}),
+        // ],
       ),
       body: Builder(
         builder: (_) {
