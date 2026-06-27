@@ -27,7 +27,10 @@ class VenuesPage extends ConsumerWidget {
         if (state.isLoading && state.stadiums.isEmpty) return const LoadingWidget();
         if (state.error != null && state.stadiums.isEmpty) {
           return ErrorStateWidget(
-            message: state.error!,
+              icon: Icons.cloud_off_outlined,
+              title: 'Something Went Wrong',
+              message: 'Our servers are having trouble. Please try later.',
+              retryLabel: 'Reload',
             onRetry: () => ref.read(venueProvider.notifier).fetch(),
           );
         }

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fifa_2026_live_score_update/App/models/stadium_model.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
@@ -43,7 +42,7 @@ class VenueCard extends StatelessWidget {
       height: 160,
       width: double.infinity,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => _imageFallback(),
+      errorBuilder: (_, _, _) => _imageFallback(),
     ),
   );
 
@@ -59,13 +58,6 @@ class VenueCard extends StatelessWidget {
     ),
   );
 
-  Widget _imagePlaceholder() => Container(
-    height: 160,
-    color: AppColors.surfaceVariant,
-    child: const Center(
-      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
-    ),
-  );
 
   // Info
 

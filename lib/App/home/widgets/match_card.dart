@@ -1,3 +1,4 @@
+import 'package:fifa_2026_live_score_update/App/home/pages/match_details_page.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
 import 'package:fifa_2026_live_score_update/Common/widgets/live_indicator.dart';
@@ -11,24 +12,30 @@ class MatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => MatchDetailPage(match: match)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _header(),
-            const SizedBox(height: 12),
-            _teamsRow(),
-            const SizedBox(height: 10),
-            _venueRow(),
-          ],
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _header(),
+              const SizedBox(height: 12),
+              _teamsRow(),
+              const SizedBox(height: 10),
+              _venueRow(),
+            ],
+          ),
         ),
       ),
     );

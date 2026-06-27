@@ -29,7 +29,10 @@ class GroupsPage extends ConsumerWidget {
           }
           if (state.error != null && state.groups.isEmpty) {
             return ErrorStateWidget(
-              message: state.error!,
+              icon: Icons.cloud_off_outlined,
+              title: 'Something Went Wrong',
+              message: 'Our servers are having trouble. Please try later.',
+              retryLabel: 'Reload',
               onRetry: () => ref.read(groupProvider.notifier).fetch(),
             );
           }

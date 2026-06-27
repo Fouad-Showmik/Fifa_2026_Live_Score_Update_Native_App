@@ -94,4 +94,7 @@ class GameModel {
   String get displayAway => awayTeamNameEn.isNotEmpty ? awayTeamNameEn : 'TBD';
   bool get isGroupStage => type == 'group';
   String get displayDate => AppUtils.formatTabDate(localDate);
+
+  List<String> get homeScorersparsed => AppUtils.parseScorers(homeScorers);
+  List<String> get awayScorersparsed => AppUtils.parseScorers(awayScorers);
 }

@@ -5,11 +5,17 @@ import 'package:flutter/material.dart';
 class ErrorStateWidget extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
+  final String? title;
+  final String retryLabel;
+  final IconData icon;
 
   const ErrorStateWidget({
     super.key,
     required this.message,
     required this.onRetry,
+    this.title,
+    this.retryLabel = 'Try Again',
+    this.icon = Icons.wifi_off_rounded,
   });
 
   @override
@@ -19,12 +25,16 @@ class ErrorStateWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.wifi_off_rounded,
-            size: 48,
-            color: AppColors.textMuted,
-          ),
+          Icon(icon, size: 48, color: AppColors.textMuted),
           const SizedBox(height: 16),
+          if (title != null) ...[
+            Text(
+              title!,
+              style: AppTextStyles.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+          ],
           Text(
             message,
             style: AppTextStyles.bodyMedium.copyWith(
@@ -42,7 +52,7 @@ class ErrorStateWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Try Again',
+                retryLabel,
                 style: AppTextStyles.titleSmall.copyWith(
                   color: AppColors.navBackground,
                 ),

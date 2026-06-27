@@ -27,7 +27,10 @@ class TeamsPage extends ConsumerWidget {
           }
           if (teamState.error != null && teamState.teams.isEmpty) {
             return ErrorStateWidget(
-              message: teamState.error!,
+              icon: Icons.cloud_off_outlined,
+              title: 'Something Went Wrong',
+              message: 'Our servers are having trouble. Please try later.',
+              retryLabel: 'Reload',
               onRetry: () => ref.read(teamProvider.notifier).fetch(),
             );
           }

@@ -53,8 +53,16 @@ class _HomePageState extends ConsumerState<HomePage> {
             );
           }
           if (state.error != null && state.matches.isEmpty) {
+            final isNetwork = state.isNetworkError;
             return ErrorStateWidget(
+              icon: isNetwork
+                  ? Icons.wifi_off_rounded
+                  : Icons.cloud_off_outlined,
+              title: isNetwork
+                  ? 'Check Internet Connection'
+                  : 'Something Went Wrong',
               message: state.error!,
+              retryLabel: 'Reload',
               onRetry: () => ref.read(matchProvider.notifier).fetch(),
             );
           }

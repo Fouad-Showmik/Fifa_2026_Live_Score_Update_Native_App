@@ -40,4 +40,37 @@ class AppUtils {
       (m) => '${m[1]},',
     );
   }
+  
+  
+  static List<String> parseScorers(String? raw) {
+    if (raw == null || raw.isEmpty || raw == 'null') return [];
+
+    final trimmed = raw.trim();
+    if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) return [];
+
+    final inner = trimmed.substring(1, trimmed.length - 1);
+    if (inner.isEmpty) return [];
+
+    final results = <String>[];
+    final buffer = StringBuffer();
+    bool inQuotes = false;
+
+    for (int i = 0; i < inner.length; i++) {
+      final ch = inner[i];
+      if (ch == '"') {
+        inQuotes = !inQuotes;
+      } else if (ch == ',' && !inQuotes) {
+        final s = buffer.toString().trim();
+        if (s.isNotEmpty) results.add(s);
+        buffer.clear();
+      } else {
+        buffer.write(ch);
+      }
+    }
+
+    final last = buffer.toString().trim();
+    if (last.isNotEmpty) results.add(last);
+
+    return results;
+  }
 }

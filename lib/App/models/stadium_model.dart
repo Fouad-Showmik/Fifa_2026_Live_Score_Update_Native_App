@@ -1,4 +1,3 @@
-import 'package:fifa_2026_live_score_update/Common/constants/app_constants.dart';
 import 'package:fifa_2026_live_score_update/Common/utlis/app_utils.dart';
 
 class StadiumModel {

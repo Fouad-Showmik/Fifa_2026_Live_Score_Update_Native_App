@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fifa_2026_live_score_update/App/models/game_model.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_constants.dart';
 import 'package:fifa_2026_live_score_update/Common/enums/app_enums.dart';
+import 'package:fifa_2026_live_score_update/Common/exeptions/app_exception.dart';
 import 'package:fifa_2026_live_score_update/Common/utlis/app_utils.dart';
 import 'package:fifa_2026_live_score_update/Services/game_service.dart';
 import 'package:flutter_riverpod/legacy.dart';
@@ -11,6 +12,7 @@ class MatchState {
   final List<GameModel> matches;
   final bool isLoading;
   final String? error;
+  final bool isNetworkError;
   final LiveScoreFilter liveFilter;
   final String selectedDate;
   final String searchQuery;
@@ -19,6 +21,7 @@ class MatchState {
     this.matches = const [],
     this.isLoading = false,
     this.error,
+    this.isNetworkError = false,
     this.liveFilter = LiveScoreFilter.all,
     this.selectedDate = '',
     this.searchQuery = '',
@@ -28,6 +31,7 @@ class MatchState {
     List<GameModel>? matches,
     bool? isLoading,
     String? error,
+    bool? isNetworkError,
     LiveScoreFilter? liveFilter,
     String? selectedDate,
     bool clearError = false,
@@ -37,6 +41,9 @@ class MatchState {
       matches: matches ?? this.matches,
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
+      isNetworkError: clearError
+          ? false
+          : (isNetworkError ?? this.isNetworkError),
       liveFilter: liveFilter ?? this.liveFilter,
       selectedDate: selectedDate ?? this.selectedDate,
       searchQuery: searchQuery ?? this.searchQuery,
@@ -76,9 +83,11 @@ class MatchController extends StateNotifier<MatchState> {
             : state.selectedDate,
       );
     } catch (e) {
+      final isNetwork = e is AppException && e.isNetworkError;
       state = state.copyWith(
         isLoading: false,
         error: e.toString().replaceFirst('Exception: ', ''),
+        isNetworkError: isNetwork,
       );
     }
   }
