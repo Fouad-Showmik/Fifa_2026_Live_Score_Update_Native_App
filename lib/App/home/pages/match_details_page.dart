@@ -26,6 +26,11 @@ class MatchDetailPage extends StatelessWidget {
           const SizedBox(height: 16),
           _divider(),
           _scorersSection(),
+          if (match.hasPenalties) ...[
+            const SizedBox(height: 16),
+            _divider(),
+            _penaltiesSection(),
+          ],
           _divider(),
           _matchInfo(),
         ],
@@ -71,7 +76,7 @@ Widget _scoreBoard() {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(width: 80), // mirrors the score block's horizontal footprint
+              const SizedBox(width: 80), 
             Expanded(
               child: Text(
                 match.displayAway,
@@ -118,19 +123,31 @@ Widget _scoreBoard() {
     );
   }
 
-  Widget _scoreBlock() {
+Widget _scoreBlock() {
     final showScore = match.isLive || match.isFinished;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: showScore
-          ? Text(
-              '${match.homeScore}  -  ${match.awayScore}',
-              style: AppTextStyles.scoreDisplay.copyWith(fontSize: 36),
-            )
-          : Text(
-              'vs',
-              style: AppTextStyles.labelMedium.copyWith(fontSize: 16),
+      child: Column(
+        children: [
+          showScore
+              ? Text(
+                  '${match.homeScore}  -  ${match.awayScore}',
+                  style: AppTextStyles.scoreDisplay.copyWith(fontSize: 36),
+                )
+              : Text(
+                  'vs',
+                  style: AppTextStyles.labelMedium.copyWith(fontSize: 16),
+                ),
+          if (match.hasPenalties)
+            Text(
+              '(${match.homePenaltyScore} - ${match.awayPenaltyScore})',
+              style: AppTextStyles.labelMedium.copyWith(
+                color: AppColors.textSecondary,
+                fontSize: 12,
+              ),
             ),
+        ],
+      ),
     );
   }
 
@@ -234,4 +251,118 @@ Widget _scoreBoard() {
     indent: 20,
     endIndent: 20,
   );
+
+  Widget _penaltiesSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'PENALTY SHOOTOUT',
+            style: AppTextStyles.labelLarge.copyWith(
+              color: AppColors.textSecondary,
+              letterSpacing: 1.1,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Center(
+            child: Text(
+              '${match.homePenaltyScore} - ${match.awayPenaltyScore}',
+              style: AppTextStyles.titleMedium.copyWith(color: AppColors.gold),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Home penalties
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      match.displayHome,
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    ...match.homePenaltyScorers.map(
+                      (s) => _penaltyRow(s, scored: true, isHome: true),
+                    ),
+                    ...match.homePenaltyMisses.map(
+                      (s) => _penaltyRow(s, scored: false, isHome: true),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Away penalties
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      match.displayAway,
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    ...match.awayPenaltyScorers.map(
+                      (s) => _penaltyRow(s, scored: true, isHome: false),
+                    ),
+                    ...match.awayPenaltyMisses.map(
+                      (s) => _penaltyRow(s, scored: false, isHome: false),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _penaltyRow(
+    String name, {
+    required bool scored,
+    required bool isHome,
+  }) {
+    final icon = Icon(
+      scored ? Icons.check_circle_outline : Icons.cancel_outlined,
+      size: 13,
+      color: scored ? AppColors.finished : AppColors.live,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: isHome
+            ? MainAxisAlignment.start
+            : MainAxisAlignment.end,
+        children: isHome
+            ? [
+                icon,
+                const SizedBox(width: 6),
+                Expanded(child: Text(name, style: AppTextStyles.labelMedium)),
+              ]
+            : [
+                Expanded(
+                  // changed from Flexible to Expanded
+                  child: Text(
+                    name,
+                    style: AppTextStyles.labelMedium,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                icon,
+              ],
+      ),
+    );
+  }
 }

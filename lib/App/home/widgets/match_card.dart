@@ -87,7 +87,7 @@ class MatchCard extends StatelessWidget {
 
   // Teams row — flags, names, score
 
-  Widget _teamsRow() {
+Widget _teamsRow() {
     final showScore = match.isLive || match.isFinished;
     return Row(
       children: [
@@ -100,9 +100,21 @@ class MatchCard extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         showScore
-            ? Text(
-                '${match.homeScore} - ${match.awayScore}',
-                style: AppTextStyles.scoreDisplay,
+            ? Column(
+                children: [
+                  Text(
+                    '${match.homeScore} - ${match.awayScore}',
+                    style: AppTextStyles.scoreDisplay,
+                  ),
+                  if (match.hasPenalties)
+                    Text(
+                      '(${match.homePenaltyScore} - ${match.awayPenaltyScore})',
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.textSecondary,
+                        fontSize: 10,
+                      ),
+                    ),
+                ],
               )
             : Text(
                 'vs',

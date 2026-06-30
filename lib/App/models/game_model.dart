@@ -20,6 +20,12 @@ class GameModel {
   final String awayTeamNameEn;
   final String homeTeamNameFa;
   final String awayTeamNameFa;
+  final int? homePenaltyScore;
+  final int? awayPenaltyScore;
+  final List<String> homePenaltyScorers;
+  final List<String> awayPenaltyScorers;
+  final List<String> homePenaltyMisses;
+  final List<String> awayPenaltyMisses;
 
   // Enriched after joining with teams data
   String? homeTeamFlag;
@@ -54,6 +60,12 @@ class GameModel {
     this.stadiumNameEn,
     this.stadiumCity,
     this.stadiumCountry,
+    this.homePenaltyScore,
+    this.awayPenaltyScore,
+    this.homePenaltyScorers = const [],
+    this.awayPenaltyScorers = const [],
+    this.homePenaltyMisses = const [],
+    this.awayPenaltyMisses = const [],
   });
 
   factory GameModel.fromJson(Map<String, dynamic> json) {
@@ -79,6 +91,24 @@ class GameModel {
       awayTeamNameEn: json['away_team_name_en']?.toString() ?? '',
       homeTeamNameFa: json['home_team_name_fa']?.toString() ?? '',
       awayTeamNameFa: json['away_team_name_fa']?.toString() ?? '',
+      homePenaltyScore: int.tryParse(
+        json['home_penalty_score']?.toString() ?? '',
+      ),
+      awayPenaltyScore: int.tryParse(
+        json['away_penalty_score']?.toString() ?? '',
+      ),
+      homePenaltyScorers: AppUtils.parseScorers(
+        json['home_penalty_scorers']?.toString() ?? '',
+      ),
+      awayPenaltyScorers: AppUtils.parseScorers(
+        json['away_penalty_scorers']?.toString() ?? '',
+      ),
+      homePenaltyMisses: AppUtils.parseScorers(
+        json['home_penalty_misses']?.toString() ?? '',
+      ),
+      awayPenaltyMisses: AppUtils.parseScorers(
+        json['away_penalty_misses']?.toString() ?? '',
+      ),
     );
   }
 
@@ -100,6 +130,7 @@ class GameModel {
     };
   }
 
+  bool get hasPenalties => homePenaltyScore != null && awayPenaltyScore != null;
   String get displayTime => AppUtils.formatTime(localDate);
   String get dateKey => AppUtils.dateKey(localDate);
   String get displayHome => homeTeamNameEn.isNotEmpty ? homeTeamNameEn : 'TBD';
