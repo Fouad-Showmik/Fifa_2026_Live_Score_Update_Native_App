@@ -117,10 +117,14 @@ class FixturesPage extends ConsumerWidget {
             itemBuilder: (_, i) {
               final entry = grouped.entries.elementAt(i);
 
+              final sectionTitle = entry.key.length == 1
+                  ? 'Group ${entry.key}'
+                  : entry.key;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SectionLabel(text: 'Group ${entry.key}'),
+                  SectionLabel(text: sectionTitle),
                   ...entry.value.map((m) => MatchCard(match: m)),
                 ],
               );

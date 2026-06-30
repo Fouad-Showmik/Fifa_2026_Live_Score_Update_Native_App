@@ -97,7 +97,7 @@ class MatchController extends StateNotifier<MatchState> {
   void setDate(String date) => state = state.copyWith(selectedDate: date);
 
   List<GameModel> filteredHomeMatches() {
-    final base = state.matches.where((m) => m.isGroupStage);
+    final base = state.matches;
 
     final filtered = switch (state.liveFilter) {
       LiveScoreFilter.all => [...base],
@@ -126,14 +126,11 @@ class MatchController extends StateNotifier<MatchState> {
     return searched;
   }
 
-  List<String> fixtureDates() =>
-      _uniqueDates(state.matches.where((m) => m.isGroupStage).toList());
+  List<String> fixtureDates() => _uniqueDates(state.matches);
 
   List<GameModel> matchesForDate() {
     if (state.selectedDate.isEmpty) return [];
-    return state.matches
-        .where((m) => m.dateKey == state.selectedDate && m.isGroupStage)
-        .toList()
+    return state.matches.where((m) => m.dateKey == state.selectedDate).toList()
       ..sort((a, b) {
         final aDate = a.localDate ?? DateTime(0);
         final bDate = b.localDate ?? DateTime(0);
@@ -144,7 +141,8 @@ class MatchController extends StateNotifier<MatchState> {
   Map<String, List<GameModel>> groupByGroup(List<GameModel> matches) {
     final map = <String, List<GameModel>>{};
     for (final m in matches) {
-      map.putIfAbsent(m.group, () => []).add(m);
+      final key = m.isGroupStage ? m.group : m.stageLabel;
+      map.putIfAbsent(key, () => []).add(m);
     }
     for (final k in map.keys) {
       map[k]!.sort((a, b) {
@@ -153,8 +151,16 @@ class MatchController extends StateNotifier<MatchState> {
         return aDate.compareTo(bDate);
       });
     }
+    // Sort: group stage groups first (single letter), then knockout rounds
     return Map.fromEntries(
-      map.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+      map.entries.toList()..sort((a, b) {
+        final aIsGroup = a.key.length == 1;
+        final bIsGroup = b.key.length == 1;
+        if (aIsGroup && bIsGroup) return a.key.compareTo(b.key);
+        if (aIsGroup) return -1;
+        if (bIsGroup) return 1;
+        return a.key.compareTo(b.key);
+      }),
     );
   }
 

@@ -87,6 +87,18 @@ class GameModel {
   bool get isLive => status.isLive;
   bool get isFinished => status.isFinished;
   bool get isUpcoming => status.isUpcoming;
+  String get stageLabel {
+    if (isGroupStage) return 'GROUP $group · MD$matchday';
+    return switch (type.toLowerCase()) {
+      'r32' => 'ROUND OF 32',
+      'r16' => 'ROUND OF 16',
+      'qf' => 'QUARTER FINAL',
+      'sf' => 'SEMI FINAL',
+      'third' => '3RD PLACE',
+      'final' => 'FINAL',
+      _ => type.toUpperCase(),
+    };
+  }
 
   String get displayTime => AppUtils.formatTime(localDate);
   String get dateKey => AppUtils.dateKey(localDate);

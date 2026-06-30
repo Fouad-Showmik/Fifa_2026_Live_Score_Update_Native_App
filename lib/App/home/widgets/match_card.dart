@@ -47,9 +47,7 @@ class MatchCard extends StatelessWidget {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       _groupTag(
-        label: match.isGroupStage
-            ? 'GROUP ${match.group} · MD${match.matchday}'
-            : match.type.toUpperCase(),
+        label: match.stageLabel,
       ),
       _timeWidget(),
     ],
