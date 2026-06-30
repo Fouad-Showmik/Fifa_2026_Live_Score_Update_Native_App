@@ -71,6 +71,7 @@ class TeamsPage extends ConsumerWidget {
           color: AppColors.gold,
           backgroundColor: AppColors.surface,
           child: ListView.builder(
+            controller: ref.watch(teamScrollProvider),
             padding: const EdgeInsets.only(bottom: 16),
             itemCount: byGroup.length,
             itemBuilder: (_, i) {

@@ -1,4 +1,3 @@
-
 import 'package:fifa_2026_live_score_update/App/venues/venue_controller.dart';
 import 'package:fifa_2026_live_score_update/App/venues/widgets/venu_card.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
@@ -23,49 +22,56 @@ class VenuesPage extends ConsumerWidget {
         title: 'Venues',
         // actions: [AppIconButton(icon: Icons.map_outlined, onTap: () {})],
       ),
-      body: Builder(builder: (_) {
-        if (state.isLoading && state.stadiums.isEmpty) return const LoadingWidget();
-        if (state.error != null && state.stadiums.isEmpty) {
-          return ErrorStateWidget(
+      body: Builder(
+        builder: (_) {
+          if (state.isLoading && state.stadiums.isEmpty) {
+            return const LoadingWidget();
+          }
+          if (state.error != null && state.stadiums.isEmpty) {
+            return ErrorStateWidget(
               icon: Icons.cloud_off_outlined,
               title: 'Something Went Wrong',
               message: 'Our servers are having trouble. Please try later.',
               retryLabel: 'Reload',
-            onRetry: () => ref.read(venueProvider.notifier).fetch(),
-          );
-        }
-        return Column(
-          children: [
-            const SizedBox(height: 4),
-            _CountryFilter(
-              selected: state.selectedCountry,
-              total: state.stadiums.length,
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: Builder(builder: (_) {
-                final list = state.filtered;
-                if (list.isEmpty) {
-                  return const EmptyStateWidget(
-                    message: 'No venues for this region',
-                    icon: Icons.stadium_outlined,
-                  );
-                }
-                return RefreshIndicator(
-                  onRefresh: () => ref.read(venueProvider.notifier).fetch(),
-                  color: AppColors.gold,
-                  backgroundColor: AppColors.surface,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    itemCount: list.length,
+              onRetry: () => ref.read(venueProvider.notifier).fetch(),
+            );
+          }
+          return Column(
+            children: [
+              const SizedBox(height: 4),
+              _CountryFilter(
+                selected: state.selectedCountry,
+                total: state.stadiums.length,
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Builder(
+                  builder: (_) {
+                    final list = state.filtered;
+                    if (list.isEmpty) {
+                      return const EmptyStateWidget(
+                        message: 'No venues for this region',
+                        icon: Icons.stadium_outlined,
+                      );
+                    }
+                    return RefreshIndicator(
+                      onRefresh: () => ref.read(venueProvider.notifier).fetch(),
+                      color: AppColors.gold,
+                      backgroundColor: AppColors.surface,
+                      child: ListView.builder(
+                        controller: ref.read(venueScrollProvider),
+                        padding: const EdgeInsets.only(bottom: 16),
+                        itemCount: list.length,
                         itemBuilder: (_, i) => VenueCard(stadium: list[i]),
-                  ),
-                );
-              }),
-            ),
-          ],
-        );
-      }),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

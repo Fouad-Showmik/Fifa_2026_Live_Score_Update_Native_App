@@ -2,6 +2,8 @@
 import 'package:fifa_2026_live_score_update/App/models/stadium_model.dart';
 import 'package:fifa_2026_live_score_update/Common/enums/app_enums.dart';
 import 'package:fifa_2026_live_score_update/Services/stadium_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 class VenueState {
@@ -47,6 +49,12 @@ class VenueState {
 
 final venueProvider = StateNotifierProvider<VenueController, VenueState>((ref) {
   return VenueController();
+});
+
+final venueScrollProvider = Provider<ScrollController>((ref) {
+  final controller = ScrollController();
+  ref.onDispose(controller.dispose);
+  return controller;
 });
 
 class VenueController extends StateNotifier<VenueState> {

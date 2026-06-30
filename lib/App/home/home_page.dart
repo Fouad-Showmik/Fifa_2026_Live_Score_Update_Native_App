@@ -71,6 +71,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             color: AppColors.gold,
             backgroundColor: AppColors.surface,
             child: ListView(
+              controller: ref.read(homeScrollProvider),
               children: [
                 if (!_isSearching) _heading(),
                 if (!_isSearching) const SizedBox(height: 4),

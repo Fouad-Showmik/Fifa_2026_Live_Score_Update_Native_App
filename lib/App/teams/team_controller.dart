@@ -1,5 +1,7 @@
 import 'package:fifa_2026_live_score_update/App/models/team_model.dart';
 import 'package:fifa_2026_live_score_update/Services/team_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 class TeamState {
@@ -61,6 +63,11 @@ final teamProvider = StateNotifierProvider<TeamController, TeamState>((ref) {
   return TeamController();
 });
 
+final teamScrollProvider = Provider<ScrollController>((ref) {
+  final controller = ScrollController();
+  ref.onDispose(controller.dispose);
+  return controller;
+});
 
 class TeamController extends StateNotifier<TeamState> {
   final _service = TeamService();

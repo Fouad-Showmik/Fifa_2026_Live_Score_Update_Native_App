@@ -6,6 +6,8 @@ import 'package:fifa_2026_live_score_update/Common/enums/app_enums.dart';
 import 'package:fifa_2026_live_score_update/Common/exeptions/app_exception.dart';
 import 'package:fifa_2026_live_score_update/Common/utlis/app_utils.dart';
 import 'package:fifa_2026_live_score_update/Services/game_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 class MatchState {
@@ -54,6 +56,12 @@ class MatchState {
 final matchProvider = StateNotifierProvider<MatchController, MatchState>(
   (ref) => MatchController(),
 );
+
+final homeScrollProvider = Provider<ScrollController>((ref) {
+  final controller = ScrollController();
+  ref.onDispose(controller.dispose);
+  return controller;
+});
 
 class MatchController extends StateNotifier<MatchState> {
   final _service = GameService();
