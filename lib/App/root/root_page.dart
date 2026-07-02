@@ -11,13 +11,30 @@ import 'package:fifa_2026_live_score_update/Common/constants/app_colors.dart';
 import 'package:fifa_2026_live_score_update/Common/constants/app_text_styles.dart';
 import 'package:fifa_2026_live_score_update/Common/enums/app_enums.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RootPage extends ConsumerWidget {
+class RootPage extends ConsumerStatefulWidget {
   const RootPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RootPage> createState() => _RootPageState();
+}
+
+class _RootPageState extends ConsumerState<RootPage> {
+  @override
+  void initState() {
+    super.initState();
+    _initApp();
+  }
+
+  Future<void> _initApp() async {
+    await Future.delayed(const Duration(seconds: 10));
+    FlutterNativeSplash.remove();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final currentTab = ref.watch(navTabProvider);
 
     return Scaffold(
