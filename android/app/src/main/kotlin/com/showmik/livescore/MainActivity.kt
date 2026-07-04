@@ -1,4 +1,4 @@
-package com.example.fifa_2026_live_score_update
+package com.showmik.livescore
 
 import io.flutter.embedding.android.FlutterActivity
 
