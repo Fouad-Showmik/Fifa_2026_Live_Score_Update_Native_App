@@ -61,7 +61,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               title: isNetwork
                   ? 'Check Internet Connection'
                   : 'Something Went Wrong',
-              message: state.error!,
+              message: isNetwork
+                  ? 'Please check your internet connection and try again.'
+                  : 'An unexpected error occurred. Please try again later.',
               retryLabel: 'Reload',
               onRetry: () => ref.read(matchProvider.notifier).fetch(),
             );

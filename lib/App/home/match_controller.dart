@@ -66,9 +66,10 @@ final homeScrollProvider = Provider<ScrollController>((ref) {
 class MatchController extends StateNotifier<MatchState> {
   final _service = GameService();
   Timer? _timer;
+  late final Future<void> initialLoad;
 
   MatchController() : super(const MatchState()) {
-    fetch();
+    initialLoad = fetch();
     _startPolling();
   }
 

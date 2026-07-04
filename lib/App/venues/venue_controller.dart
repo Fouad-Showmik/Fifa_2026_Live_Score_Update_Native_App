@@ -61,9 +61,10 @@ final venueScrollProvider = Provider<ScrollController>((ref) {
 
 class VenueController extends StateNotifier<VenueState> {
   final _service = StadiumService();
+  late final Future<void> initialLoad; 
 
   VenueController() : super(const VenueState()) {
-    fetch();
+    initialLoad = fetch();
   }
 
   Future<void> fetch() async {

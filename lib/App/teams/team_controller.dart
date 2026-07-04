@@ -71,9 +71,10 @@ final teamScrollProvider = Provider<ScrollController>((ref) {
 
 class TeamController extends StateNotifier<TeamState> {
   final _service = TeamService();
+  late final Future<void> initialLoad; 
 
   TeamController() : super(const TeamState()) {
-    fetch();
+    initialLoad = fetch();
   }
 
   Future<void> fetch() async {

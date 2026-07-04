@@ -44,6 +44,13 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+
+    applicationVariants.all {
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            outputImpl.outputFileName = "LiveScore-${versionName}.apk"
+        }
+    }
 }
 
 kotlin {

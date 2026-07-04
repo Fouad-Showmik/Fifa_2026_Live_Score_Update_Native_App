@@ -28,9 +28,26 @@ class _RootPageState extends ConsumerState<RootPage> {
     _initApp();
   }
 
-  Future<void> _initApp() async {
-    await Future.delayed(const Duration(seconds: 10));
-    FlutterNativeSplash.remove();
+Future<void> _initApp() async {
+    final dataFuture = Future.wait([
+      ref.read(matchProvider.notifier).initialLoad,
+      ref.read(teamProvider.notifier).initialLoad,
+      ref.read(venueProvider.notifier).initialLoad,
+    ]).timeout(const Duration(seconds: 6), onTimeout: () => []);
+
+    final minSplashDuration = Future.delayed(
+      const Duration(milliseconds: 1600),
+    );
+
+    try {
+      await Future.wait([dataFuture, minSplashDuration]);
+    } catch (e) {
+      debugPrint('Init data load error: $e');
+    } finally {
+      if (mounted) {
+        FlutterNativeSplash.remove();
+      }
+    }
   }
 
   @override
